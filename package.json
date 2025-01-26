@@ -15,5 +15,10 @@
     "url": "https://github.com/Ashkan0026/Letterboxd/issues"
   },
   "homepage": "https://github.com/Ashkan0026/Letterboxd#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
 }
