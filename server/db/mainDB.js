@@ -34,9 +34,11 @@ function initializeFollowsTable() {
     db.exec(`
         CREATE TABLE IF NOT EXISTS follows(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL, 
-        following_user_id INTEGER NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL REFERENCES [users]([id]) ON DELETE CASCADE ON UPDATE CASCADE, 
-        follower_user_id INTEGER NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL REFERENCES [users]([id]) ON DELETE CASCADE ON UPDATE CASCADE, 
-        created_at TIMESTAMP NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL);
+        following_user_id INTEGER NOT NULL ON CONFLICT FAIL REFERENCES [users]([id]) ON DELETE CASCADE ON UPDATE CASCADE, 
+        follower_user_id INTEGER NOT NULL ON CONFLICT FAIL REFERENCES [users]([id]) ON DELETE CASCADE ON UPDATE CASCADE, 
+        created_at TIMESTAMP NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL,
+        CHECK(following_user_id != follower_user_id)
+        );
     `);
 }
 
@@ -56,12 +58,12 @@ function initializeMoviesTable() {
 
 function initializeRepliesTable() {
     db.exec(`
-        CREATE TABLE IF NOT EXISTS replies(
-        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL, 
-        score FLOAT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL, 
-        desc VARCHAR(80) NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL, 
-        user_id INTEGER NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL REFERENCES [users]([id]), 
-        movie_id INTEGER NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL REFERENCES [movies]([id]));
+        CREATE TABLE IF NOT EXISTS replies (
+        [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL, 
+        [score] FLOAT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL, 
+        [desc] VARCHAR(80) NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL, 
+        [user_id] INTEGER NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL REFERENCES [users]([id]) ON DELETE CASCADE ON UPDATE CASCADE, 
+        [movie_id] INTEGER NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL REFERENCES [movies]([id]) ON DELETE CASCADE ON UPDATE CASCADE);
     `);
 }   
 
@@ -136,10 +138,42 @@ function checkIfUserExists(username, password) {
     }
 }
 
+/**
+ * 
+ * @param {Follows} follows 
+ */
+function insertFollows(follows) {
+    const insertStmt = db.prepare("INSERT INTO follows (following_user_id, follower_user_id, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)")
+
+    try {
+        insertStmt.run(follows._following_user_id, follows._follower_user_id)
+        return {success: true, message: "Follow entry added successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
+function getFollow(follows_id) {
+    const getStmt = db.prepare("SELECT * FROM follows WHERE id = ?")
+    try {
+        const followData = getStmt.get(follows_id)
+        const follow = new Follows(followData.id, followData.following_user_id, followData.follower_user_id, followData.created_at)
+        return {follow: follow, success: true, message: ""}
+    } catch(error) {
+        return {follow: null, success: false, message: error.message}
+    }
+}
+
+function getUserFollowers(user_id) {
+    const stmt = db.prepare("SELECT * FROM ")
+}
+
 module.exports = {
     initialize,
     getSpecifiedUser,
     getSpecifiedUserForLogin,
     insertSignupUser,
-    checkIfUserExists
+    checkIfUserExists,
+    insertFollows,
+    getFollow
 }

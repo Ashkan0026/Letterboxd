@@ -35,6 +35,10 @@ class Follows {
     get createdAt() {
         return this._createdAt;
     }
+
+    displayInfo() {
+        console.log(`${this._id} ${this._following_user_id} ${this._follower_user_id}`)
+    }
 }
 
 module.exports = {
