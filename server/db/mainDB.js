@@ -314,6 +314,57 @@ function deleteMovie(movie_id) {
     }
 }
 
+/**
+ * 
+ * @param {Reply} Reply 
+ */
+function insertReply(reply) {
+    const stmt = db.prepare("INSERT INTO replies (score, desc, user_id, movie_id) VALUES (?, ?, ?, ?)")
+    
+    try {
+        stmt.run(reply._score, reply._desc, reply._user_id, reply._movie_id)
+        return {success: true, message: "Reply added successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
+function getReply(reply_id) {
+    const stmt = db.prepare("SELECT * FROM replies WHERE id = ? LIMIT 1")
+
+    try {
+        const replyData = stmt.get(reply_id)
+        const reply = new Reply(replyData.id, replyData.score, replyData.desc, replyData.user_id, replyData.movie_id)
+        return {reply: reply, success: true, message: ""}
+    } catch(error) {
+        return {reply: null, success: false, message: error.message}
+    }
+}
+
+function getMovieReplies(movie_id) {
+    const stmt = db.prepare("SELECT * FROM replies WHERE movie_id = ?")
+
+    try {
+        const rows = stmt.all(movie_id)
+        const replies = rows.map(row => new Reply(row.id, row.score, row.desc, row.user_id, row.movie_id))
+        return {replies: replies, success: true, message: ""}
+    } catch(error) {
+        return {replies: [], success: false, message: error.message}
+    }
+}
+
+function getUserReplies(user_id) {
+    const stmt = db.prepare("SELECT * FROM replies WHERE user_id = ?")
+
+    try {
+        const rows = stmt.all(user_id)
+        const replies = rows.map(row => new Reply(row.id, row.score, row.desc, row.user_id, row.movie_id))
+        return {replies: replies, success: true, message: ""}
+    } catch(error) {
+        return {replies: [], success: false, message: error.message}
+    }
+}
+
 module.exports = {
     initialize,
     getSpecifiedUser,
@@ -329,5 +380,9 @@ module.exports = {
     getMovies,
     getUserMovies,
     editMovie,
-    deleteMovie
+    deleteMovie,
+    insertReply,
+    getReply,
+    getUserReplies,
+    getMovieReplies
 }
