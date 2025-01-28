@@ -75,7 +75,7 @@ function getSpecifiedUser(user_id) {
     try {
         const userData = stmt.get(user_id)
         if(userData) {
-            return {user: new User(userData.id, userData.username, userData.password, userData.createdAt, userData.isAdmin), success: true, message: "User added successfully"};
+            return {user: new User(userData.id, userData.username, userData.password, userData.created_at, userData.isAdmin), success: true, message: "User added successfully"};
         } else {
             return {user: null, success: false, message: "userData is not valid"}
         }
@@ -95,7 +95,7 @@ function getSpecifiedUserForLogin(username, password) {
     try {
         const userData = stmt.get(username, password)
         if(userData) {
-            return {user: new User(userData.id, userData.username, userData.password, userData.createdAt, userData.isAdmin), success: true, message: "User added successfully"};
+            return {user: new User(userData.id, userData.username, userData.password, userData.created_at, userData.isAdmin), success: true, message: "User exists"};
         } else {
             return {user: null, success: false, message: "userData is not valid"}
         }
@@ -111,10 +111,11 @@ function getSpecifiedUserForLogin(username, password) {
 function insertSignupUser(user) {
     const insertStmt = db.prepare("INSERT INTO users (username, password, created_at, isAdmin) VALUES (?, ?, CURRENT_TIMESTAMP, ?)")
     try {
-        insertStmt.run(user._username, user._password, user._isAdmin)
+        insertStmt.run(user._username, user._password, user._isAdmin ? 1 : 0)
         return {success: true, message: "User added successfully"}
     }
     catch(error) {
+        console.log(error)
         return {success: false, message: error.message}
     }
 }
@@ -125,11 +126,11 @@ function insertSignupUser(user) {
  * @param {String} password 
  */
 function checkIfUserExists(username, password) {
-    const existsStmt = db.prepare("SELECT COUNT(*) FROM users WHERE username = ? AND password = ?")
+    const existsStmt = db.prepare("SELECT 1 FROM users WHERE username = ? AND password = ? LIMIT 1")
 
     try {
         const userData = existsStmt.get(username, password)
-        return userData.count > 0
+        return !!userData;
     } catch (error) {
         return false
     }
@@ -139,5 +140,6 @@ module.exports = {
     initialize,
     getSpecifiedUser,
     getSpecifiedUserForLogin,
-    insertSignupUser
+    insertSignupUser,
+    checkIfUserExists
 }

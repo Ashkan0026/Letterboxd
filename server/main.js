@@ -1,5 +1,6 @@
 const {createDBIfNotExists} = require("./utils/utility")
-const {initialize} = require("./db/mainDB")
+const {initialize, getSpecifiedUser, getSpecifiedUserForLogin, checkIfUserExists, insertSignupUser} = require("./db/mainDB")
+const {User} = require("./model/users")
 const express = require("express")
 const path = require("path")
 require("dotenv").config()
@@ -16,4 +17,5 @@ app.listen(port, () => {
     createDBIfNotExists(db_dir, db_file)
     const dbPath = path.join(db_dir, db_file)
     initialize(dbPath)
+
 })
