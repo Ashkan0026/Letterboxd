@@ -52,3 +52,7 @@ class Reply {
       this._movie_id = value;
     }
 }
+
+module.exports = {
+    Reply
+}

@@ -74,3 +74,7 @@ class Movie {
         this._added_by = value;
     }
 }
+
+module.exports = {
+    Movie
+}

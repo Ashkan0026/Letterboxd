@@ -36,3 +36,7 @@ class Follows {
         return this._createdAt;
     }
 }
+
+module.exports = {
+    Follows
+}

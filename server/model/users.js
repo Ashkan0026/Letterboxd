@@ -1,5 +1,5 @@
 class User {
-    constructor(id, username, password, createdAt, isAdmin) {
+    constructor(id, username, password, createdAt, isAdmin = false) {
         this._id = id
         this._username = username
         this._password = password
@@ -45,4 +45,8 @@ class User {
     get createdAt() {
     return this._createdAt;
     }
+}
+
+module.exports = {
+    User
 }

@@ -1,4 +1,8 @@
 const sqliteDatabase = require("better-sqlite3")
+const {User} = require("../model/users")
+const {Movie} = require("../model/movies")
+const {Follows} = require("../model/follows")
+const {Reply} = require("../model/replies")
 
 let db = null
 
@@ -61,6 +65,79 @@ function initializeRepliesTable() {
     `);
 }   
 
+/**
+ * 
+ * @param {Number} user_id 
+ */
+function getSpecifiedUser(user_id) {
+    const stmt = db.prepare("SELECT * FROM users WHERE id = ?")
+    
+    try {
+        const userData = stmt.get(user_id)
+        if(userData) {
+            return {user: new User(userData.id, userData.username, userData.password, userData.createdAt, userData.isAdmin), success: true, message: "User added successfully"};
+        } else {
+            return {user: null, success: false, message: "userData is not valid"}
+        }
+    } catch(error) {
+        return {user: null, success: false, message: error.message}
+    }
+}
+
+/**
+ * 
+ * @param {String} username 
+ * @param {String} password 
+ */
+function getSpecifiedUserForLogin(username, password) {
+    const stmt = db.prepare("SELECT * FROM users WHERE username = ? AND password = ?")
+    
+    try {
+        const userData = stmt.get(username, password)
+        if(userData) {
+            return {user: new User(userData.id, userData.username, userData.password, userData.createdAt, userData.isAdmin), success: true, message: "User added successfully"};
+        } else {
+            return {user: null, success: false, message: "userData is not valid"}
+        }
+    } catch(error) {
+        return {user: null, success: false, message: error.message}
+    }
+}
+
+/**
+ * 
+ * @param {User} user 
+ */
+function insertSignupUser(user) {
+    const insertStmt = db.prepare("INSERT INTO users (username, password, created_at, isAdmin) VALUES (?, ?, CURRENT_TIMESTAMP, ?)")
+    try {
+        insertStmt.run(user._username, user._password, user._isAdmin)
+        return {success: true, message: "User added successfully"}
+    }
+    catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
+/**
+ * 
+ * @param {String} username 
+ * @param {String} password 
+ */
+function checkIfUserExists(username, password) {
+    const existsStmt = db.prepare("SELECT COUNT(*) FROM users WHERE username = ? AND password = ?")
+
+    try {
+        const userData = existsStmt.get(username, password)
+        return userData.count > 0
+    } catch (error) {
+        return false
+    }
+}
+
 module.exports = {
-    initialize
+    initialize,
+    getSpecifiedUser,
+    getSpecifiedUserForLogin,
+    insertSignupUser
 }
