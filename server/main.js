@@ -19,8 +19,4 @@ app.listen(port, () => {
     createDBIfNotExists(db_dir, db_file)
     const dbPath = path.join(db_dir, db_file)
     initialize(dbPath)
-
-    const movie = new Movie(4, null, "David David OSA, let's do jihad in the way of god", undefined, "C:\\Program Files\\", null, 6)
-    const result = editMovie(movie)
-    console.log(result)
 })
