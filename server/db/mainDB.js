@@ -177,6 +177,19 @@ function getUserFollowers(user_id) {
     }
 }
 
+function getUserFollowings(user_id) {
+    const stmt = db.prepare("SELECT users.id AS id, users.username AS username, users.created_at AS created_at, users.isAdmin AS isAdmin FROM users INNER JOIN follows WHERE users.id = follows.following_user_id AND follows.follower_user_id = ?;")
+    try {
+        const rows =  stmt.all(user_id)
+        const followings = rows.map(row => new User(row.id, row.username, "", row.createdAt, row.isAdmin))
+        
+        return {followings: followings, success: true, message: "All followings"}
+    } catch(error) {
+        return {followings: [], success: false, message: error.message}
+    }
+
+}
+
 module.exports = {
     initialize,
     getSpecifiedUser,
@@ -185,5 +198,6 @@ module.exports = {
     checkIfUserExists,
     insertFollows,
     getFollow,
-    getUserFollowers
+    getUserFollowers,
+    getUserFollowings
 }

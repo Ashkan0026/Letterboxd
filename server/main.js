@@ -1,5 +1,5 @@
 const {createDBIfNotExists} = require("./utils/utility")
-const {initialize, insertFollows, getFollow, insertSignupUser} = require("./db/mainDB")
+const {initialize, getUserFollowings, insertFollows, getFollow, insertSignupUser} = require("./db/mainDB")
 const {User} = require("./model/users")
 const {Follows} = require("./model/follows")
 const express = require("express")
@@ -18,4 +18,5 @@ app.listen(port, () => {
     createDBIfNotExists(db_dir, db_file)
     const dbPath = path.join(db_dir, db_file)
     initialize(dbPath)
+
 })
