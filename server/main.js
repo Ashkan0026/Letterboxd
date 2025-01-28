@@ -1,7 +1,8 @@
 const {createDBIfNotExists} = require("./utils/utility")
-const {initialize, getUserFollowings, insertFollows, getFollow, insertSignupUser} = require("./db/mainDB")
+const {initialize, getMovie, getMovies, editMovie, deleteMovie, getUserMovies,insertMovie} = require("./db/mainDB")
 const {User} = require("./model/users")
 const {Follows} = require("./model/follows")
+const {Movie} = require("./model/movies")
 const express = require("express")
 const path = require("path")
 require("dotenv").config()
@@ -19,4 +20,7 @@ app.listen(port, () => {
     const dbPath = path.join(db_dir, db_file)
     initialize(dbPath)
 
+    const movie = new Movie(4, null, "David David OSA, let's do jihad in the way of god", undefined, "C:\\Program Files\\", null, 6)
+    const result = editMovie(movie)
+    console.log(result)
 })

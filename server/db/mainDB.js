@@ -187,7 +187,131 @@ function getUserFollowings(user_id) {
     } catch(error) {
         return {followings: [], success: false, message: error.message}
     }
+}
 
+/**
+ * 
+ * @param {Movie} movie 
+ */
+function insertMovie(movie) {
+    const insertStmt = db.prepare("INSERT INTO movies (title, desc, genre, image_path, build_year, added_by) VALUES (?, ?, ?, ?, ?, ?)") 
+
+    try {
+        insertStmt.run(movie._title, movie._desc, movie._genre, movie._image_path, movie._build_year, movie._added_by)
+        return {success: true, message: "movie added successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
+function getMovie(movie_id) {
+    const stmt = db.prepare("SELECT * FROM movies WHERE id = ? LIMIT 1")
+
+    try {
+        const movieData = stmt.get(movie_id)
+        const movie = new Movie(movieData.id, movieData.title, movieData.desc, movieData.genre, movieData.image_path, movieData.build_year, movieData.added_by)
+    
+        return {movie: movie, success: true, message: ""}
+    } catch(error) {
+        return {movie: null, success: false, message: error.message}
+    }
+} 
+
+function getMovies() {
+    const stmt = db.prepare("SELECT * FROM movies")
+
+    try {
+        const rows = stmt.all()
+        const movies = rows.map(row => new Movie(row.id, row.title, row.desc, row.genre, row.image_path, row.build_year, row.added_by))
+        return {movies: movies, success: true, message: ""}
+    } catch(error) {
+        return {movies: [], success: false, message: error.message}
+    }
+}
+
+function getUserMovies(user_id) {
+    const stmt = db.prepare("SELECT * FROM movies WHERE added_by = ?")
+
+    try {
+        const rows = stmt.all(user_id)
+        const movies = rows.map(row => new Movie(row.id, row.title, row.desc, row.genre, row.image_path, row.build_year, row.added_by))
+        return {movies: movies, success: true, message: ""}
+    } catch(error) {
+        return {movies: [], success: false, message: error.message}
+    }
+}
+
+/**
+ * 
+ * @param {Movie} movie 
+ */
+function editMovie(movie) { 
+    let query = "UPDATE movies SET";
+    let params = [];
+    let first = true;
+    if(movie._title !== undefined && movie._title !== null && movie._title !== "") {
+        if(!first) {
+            query += ","
+        }
+        query += " title = ?";
+        params.push(movie._title)
+        first = false
+    }
+    if(movie._desc !== undefined && movie._desc !== null && movie._desc !== "") {
+        if(!first) {
+            query += ","
+        }
+        query += " desc = ?";
+        params.push(movie._desc);
+        first = false
+    }
+    if(movie._genre !== undefined && movie._genre !== null && movie._genre !== "") {
+        if(!first) {
+            query += ","
+        }
+        query += " genre = ?";
+        params.push(movie._genre)
+        first = false;
+    }
+    if(movie._image_path !== undefined && movie._image_path !== null && movie._image_path !== "") {
+        if(!first) {
+            query += ","
+        }
+        query += " image_path = ?";
+        params.push(movie._image_path);
+        first = false;
+    }
+    if(movie._build_year !== undefined && movie._build_year !== null && movie._build_year !== 0) {
+        if(!first) {
+            query += ","
+        }
+        query += " build_year = ?";
+        params.push(movie._build_year);
+        first = false;
+    }
+    query += " WHERE id = ?"
+    params.push(movie._id)
+    console.log(query)
+    const stmt = db.prepare(query)
+    
+    try {
+        const res = stmt.run(...params)
+        console.log(res)
+        return {success: true, message: "Movie updated successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
+function deleteMovie(movie_id) {
+    const stmt = db.prepare("DELETE FROM movies WHERE id = ?")
+
+    try {
+        stmt.run(movie_id)
+        return {success: true, message: "movie updated successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
 }
 
 module.exports = {
@@ -199,5 +323,11 @@ module.exports = {
     insertFollows,
     getFollow,
     getUserFollowers,
-    getUserFollowings
+    getUserFollowings,
+    insertMovie,
+    getMovie,
+    getMovies,
+    getUserMovies,
+    editMovie,
+    deleteMovie
 }
