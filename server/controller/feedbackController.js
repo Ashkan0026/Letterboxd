@@ -23,7 +23,7 @@ class FeedbackController {
     }
 
     // get all feedbacks
-    async getFeedbacks(req, res){
+    async getAllFeedbacks(req, res){
         try{
             // Call the feedback service
 

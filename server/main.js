@@ -7,6 +7,10 @@ const {Reply} = require("./model/replies")
 const express = require("express")
 const path = require("path")
 const moviesRoutes = require('./routes/movies');
+const authenticationRoutes = require('./routes/authentication');
+const userRoutes = require('./routes/user');
+const feedbackRoutes = require('./routes/feedback');
+const friendsRoutes = require('./routes/friends');
 require("dotenv").config()
 
 const app = express()
@@ -17,8 +21,11 @@ const db_file = process.env.DB_FILE || "main.db"
 const db_dir = process.env.DB_DIR || "database"
 
 // add routes here
-// Use movies routes
+app.use('/api', authenticationRoutes);  
 app.use('/api', moviesRoutes);
+app.use('/api', userRoutes);
+app.use('/api', feedbackRoutes);
+app.use('/api', friendsRoutes);
 
 
 app.listen(port, () => {
