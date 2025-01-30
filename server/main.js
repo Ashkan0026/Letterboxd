@@ -10,7 +10,7 @@ const moviesRoutes = require('./routes/movies');
 const authenticationRoutes = require('./routes/authentication');
 const userRoutes = require('./routes/user');
 const feedbackRoutes = require('./routes/feedback');
-const friendsRoutes = require('./routes/friends');
+const friendsRoutes = require('./routes/freind');
 require("dotenv").config()
 
 const app = express()

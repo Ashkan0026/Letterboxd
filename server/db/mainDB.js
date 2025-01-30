@@ -67,6 +67,29 @@ function initializeRepliesTable() {
     `);
 }   
 
+function getAllUsers() {
+    const stmt = db.prepare("SELECT * FROM users")
+
+    try {
+        const rows = stmt.all()
+        const users = rows.map(row => new User(row.id, row.username, row.password, row.created_at, row.isAdmin))
+        return {users: users, success: true, message: "All users"}
+    } catch(error) {
+        return {users: [], success: false, message: error.message}
+    }
+}
+
+function deleteUser(user_id)
+{
+    const stmt = db.prepare("DELETE FROM users WHERE id = ?")
+    try {
+        stmt.run(user_id)
+        return {success: true, message: "User deleted successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
 /**
  * 
  * @param {Number} user_id 
@@ -111,10 +134,18 @@ function getSpecifiedUserForLogin(username, password) {
  * @param {User} user 
  */
 function insertSignupUser(user) {
+    // check if user exists
+    const existsStmt = db.prepare("SELECT 1 FROM users WHERE username = ? LIMIT 1")
+    const userData = existsStmt.get(user._username)
+    if(userData) {
+        return {success: false, message: "User already exists"}
+    }
+
     const insertStmt = db.prepare("INSERT INTO users (username, password, created_at, isAdmin) VALUES (?, ?, CURRENT_TIMESTAMP, ?)")
     try {
         insertStmt.run(user._username, user._password, user._isAdmin ? 1 : 0)
-        return {success: true, message: "User added successfully"}
+        const user_id = db.prepare("SELECT id FROM users WHERE username = ?").get(user._username).id
+        return {success: true, message: "User added successfully", user_id: user_id}
     }
     catch(error) {
         console.log(error)
@@ -132,6 +163,21 @@ function checkIfUserExists(username, password) {
 
     try {
         const userData = existsStmt.get(username, password)
+        return !!userData;
+    } catch (error) {
+        return false
+    }
+}
+
+/**
+ * 
+ * @param {String} username 
+ */
+function checkIfUserExists(username) {
+    const existsStmt = db.prepare("SELECT 1 FROM users WHERE username = ? LIMIT 1")
+
+    try {
+        const userData = existsStmt.get(username)
         return !!userData;
     } catch (error) {
         return false
@@ -189,6 +235,16 @@ function getUserFollowings(user_id) {
     }
 }
 
+function deleteFollows(follower_id, following_id){
+    const stmt = db.prepare("DELETE FROM follows WHERE follower_user_id = ? AND following_user_id = ?")
+    try {
+        stmt.run(follower_id, following_id)
+        return {success: true, message: "Follow entry deleted successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
 /**
  * 
  * @param {Movie} movie 
@@ -232,6 +288,19 @@ function getMovies() {
 function getUserMovies(user_id) {
     const stmt = db.prepare("SELECT * FROM movies WHERE added_by = ?")
 
+    try {
+        const rows = stmt.all(user_id)
+        const movies = rows.map(row => new Movie(row.id, row.title, row.desc, row.genre, row.image_path, row.build_year, row.added_by))
+        return {movies: movies, success: true, message: ""}
+    } catch(error) {
+        return {movies: [], success: false, message: error.message}
+    }
+}
+
+function getReveiwedMovie(user_id)
+{
+    // get all movies that user register a feedback on it
+    const stmt = db.prepare("SELECT * FROM movies WHERE id IN (SELECT movie_id FROM replies WHERE user_id = ?)")
     try {
         const rows = stmt.all(user_id)
         const movies = rows.map(row => new Movie(row.id, row.title, row.desc, row.genre, row.image_path, row.build_year, row.added_by))
@@ -329,6 +398,18 @@ function insertReply(reply) {
     }
 }
 
+function getAllReplies() {
+    const stmt = db.prepare("SELECT * FROM replies")
+
+    try {
+        const rows = stmt.all()
+        const replies = rows.map(row => new Reply(row.id, row.score, row.desc, row.user_id, row.movie_id))
+        return {replies: replies, success: true, message: ""}
+    } catch(error) {
+        return {replies: [], success: false, message: error.message}
+    }
+}
+
 function getReply(reply_id) {
     const stmt = db.prepare("SELECT * FROM replies WHERE id = ? LIMIT 1")
 
@@ -365,6 +446,17 @@ function getUserReplies(user_id) {
     }
 }
 
+function deleteReply(reply_id) {
+    const stmt = db.prepare("DELETE FROM replies WHERE id = ?")
+
+    try {
+        stmt.run(reply_id)
+        return {success: true, message: "Reply deleted successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
 module.exports = {
     initialize,
     getSpecifiedUser,
@@ -384,5 +476,11 @@ module.exports = {
     insertReply,
     getReply,
     getUserReplies,
-    getMovieReplies
+    getMovieReplies,
+    getReveiwedMovie,
+    deleteUser,
+    getAllUsers,
+    deleteFollows,
+    getAllReplies,
+    deleteReply
 }

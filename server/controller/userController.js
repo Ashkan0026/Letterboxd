@@ -1,14 +1,18 @@
+const User = require('../model/users');
+const UserService = require('../services/userService');
+
 class UserController {
     constructor() {
+        this.userService = new UserService();
     }
 
     // get all users
     async getUsers(req, res){
         try{
             // Call the user service
-
+            let users = await this.userService.getUsers();
             // return all users
-            return res.status(200).json({ users: [] });
+            return res.status(200).json({ users});
         } catch(error){
             res.status(401).json({message: error.message});
         }
@@ -20,6 +24,7 @@ class UserController {
             const userId = req.params.user_id;
 
             // Call the user service
+            this.userService.deleteUser(userId);
 
             return res.status(200).json({ message: 'User deleted successfully' });
         } catch(error){

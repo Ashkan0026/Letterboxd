@@ -1,8 +1,9 @@
 
-const { generateToken, authenticateToken, authorizeRole } = require('../utils/jwt');
+const MovieService = require('../services/movieService');
 
 class MoviesController {
     constructor() {
+        this.movieService = new MovieService();
     }
     
     // get all movies 
@@ -11,9 +12,10 @@ class MoviesController {
           // extract query parameters
           const { genre, from_published_year, to_published_year, from_rate, to_rate } = req.query;
           // Call the movie service
-          
+          let movies = (await this.movieService.getMovies(genre, from_published_year, to_published_year, from_rate, to_rate)).movies;
+
           // return all movies
-          return res.status(200).json({ movies: [] });
+          return res.status(200).json({ movies });
       } catch(error){
         res.status(401).json({message: error.message});
       }
@@ -25,8 +27,9 @@ class MoviesController {
             const userId = req.user.id; // Extract user_id from the JWT token
 
             // Call the movie service to fetch user’s favorite movies
-
-            return res.status(200).json({ favoriteMovies: [] });
+            let favoriteMovies = (await this.movieService.getReviewedMovie(userId)).favoriteMovies;
+            
+            return res.status(200).json({ favoriteMovies });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -35,13 +38,14 @@ class MoviesController {
     // add new movie
     async addMovie(req, res){
         try{
-            const { title, genre, published_year, poster, images } = req.body;
+            const { title, desc, genre, published_year, images } = req.body;
+            
+            let admin_id = req.user.id; // Extract user_id from the JWT token
 
             // Call the movie service
+            this.movieService.addMovie(title, desc, genre, images, published_year, admin_id);
 
-            // return movie id
-            var movieId = 1;
-            return res.status(200).json({ movieId });
+            return res.status(204);
         } catch(error){
             res.status(401).json({message: error.message});
         }
@@ -51,9 +55,11 @@ class MoviesController {
     async deleteMovie(req, res){
         try{
             const movieId = req.params.movie_id;
-
+            let admin_id = req.user.id; // Extract user_id from the JWT token
             // Call the movie service
 
+            this.movieService.deleteMovie(movieId);
+            
             return res.status(200).json({ message: 'Movie deleted successfully' });
         } catch(error){
             res.status(401).json({message: error.message});
@@ -64,9 +70,10 @@ class MoviesController {
     async editMovie(req, res){
         try{
             const movieId = req.params.movie_id;
-            const { title, genre, published_year, poster, images } = req.body;
+            const { title, desc, genre, published_year, images } = req.body;
 
             // Call the movie service
+            this.movieService.editMovie(movieId, title, desc, genre, images, published_year);
 
             return res.status(200).json({ message: 'Movie edited successfully' });
         } catch(error){
