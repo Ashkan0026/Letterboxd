@@ -138,6 +138,17 @@ function checkIfUserExists(username, password) {
     }
 }
 
+function deleteUser(user_id) {
+    const deleteStmt = db.prepare("DELETE FROM users WHERE id = ?")
+
+    try {
+        deleteStmt.run(user_id)
+        return {success: true, message: "User deleted successfully"}
+    } catch(error) {
+        return {success: false, message: error.message}
+    }
+}
+
 /**
  * 
  * @param {Follows} follows 
@@ -384,5 +395,6 @@ module.exports = {
     insertReply,
     getReply,
     getUserReplies,
-    getMovieReplies
+    getMovieReplies,
+    deleteUser
 }
