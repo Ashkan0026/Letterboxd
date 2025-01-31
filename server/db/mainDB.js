@@ -222,7 +222,7 @@ function getFollow(follows_id) {
 }
 
 function getUserFollowers(user_id) {
-    const stmt = db.prepare(`SELECT users.id AS id, users.username AS username, users.created_at AS createdAt, users.isAdmin AS isAdmin FROM users INNER JOIN follows WHERE users.id = follows.follower_user_id AND follows.following_user_id = ?;`)
+    const stmt = db.prepare(`SELECT users.id AS id, users.username AS username, users.created_at AS createdAt, users.isAdmin AS isAdmin FROM users INNER JOIN follows WHERE users.id = follows.follower_user_id AND follows.following_user_id = ?`)
     
     try {
         const rows = stmt.all(user_id)

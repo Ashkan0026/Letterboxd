@@ -17,6 +17,10 @@ class AuthenticationService {
                 // check password
                 let user = db.getSpecifiedUserForLogin(username, password)
                 if (user.user.password === password) {
+                    if(user.user._isAdmin)
+                    {
+                        role = 'admin'
+                    }
                     let req = {id: user.user.id, role: role}
                     let token = generateToken(req)
                     return token

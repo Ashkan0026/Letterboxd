@@ -53,7 +53,11 @@ class MovieService {
 
             let movie = new Movie(0, title, desc, genr, path, year, admin_id)
             let res = db.insertMovie(movie)
-            return res.movie_id
+            if(!res.success)
+            {
+                console.log(res.message)
+            }
+            return 0
         } catch (error){
             throw(error)
         }
@@ -85,6 +89,19 @@ class MovieService {
             let movies = db.getReveiwedMovie(userId);
             return movies
         } catch (error){
+            throw(error)
+        }
+    }
+
+    async editMovie(movieId, title, desc, genre, images, published_year) {
+        try {
+            const movie = new Movie(movieId, title, desc, genre, images, published_year, 0)
+            const result = db.editMovie(movie)
+            if(!result.success)
+            {
+                console.log(result.message)
+            }
+        } catch(error) {
             throw(error)
         }
     }

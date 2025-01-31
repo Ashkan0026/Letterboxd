@@ -22,7 +22,6 @@ class FriendController {
     async getMyFriends(req, res){
         try{
             const userId = req.user.id;
-
             let friends = (await this.friendService.getFriends(userId)).followers; 
             // Call the friend service
 

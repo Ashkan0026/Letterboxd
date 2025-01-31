@@ -1,9 +1,5 @@
 const {createDBIfNotExists} = require("./utils/utility")
-const {initialize, getReply, insertReply, getUserReplies, getMovieReplies} = require("./db/mainDB")
-const {User} = require("./model/users")
-const {Follows} = require("./model/follows")
-const {Movie} = require("./model/movies")
-const {Reply} = require("./model/replies")
+const {initialize} = require("./db/mainDB")
 const express = require("express")
 const path = require("path")
 const moviesRoutes = require('./routes/movies');

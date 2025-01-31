@@ -41,11 +41,9 @@ class MoviesController {
             const { title, desc, genre, published_year, images } = req.body;
             
             let admin_id = req.user.id; // Extract user_id from the JWT token
-
             // Call the movie service
             this.movieService.addMovie(title, desc, genre, images, published_year, admin_id);
-
-            return res.status(204);
+            return res.status(200);
         } catch(error){
             res.status(401).json({message: error.message});
         }
