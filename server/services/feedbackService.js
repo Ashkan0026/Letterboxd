@@ -9,7 +9,7 @@ class FeedbackService{
     async getReplies(){
         try{
             let replies = db.getAllReplies()
-            Reply();
+            
             return replies
         } catch (error){
             throw(error)
@@ -21,7 +21,10 @@ class FeedbackService{
 
             let newReply = new Reply(0, score, desc, userId, movie_id);
             let res = db.insertReply(newReply);
-            return res
+            if(!res.success)
+            {
+                console.log(res.message)
+            }
         } catch (error){
             throw(error)
         }

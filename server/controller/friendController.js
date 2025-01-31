@@ -9,10 +9,10 @@ class FriendController {
     async addFriend(req, res){
         try{
             const { friend_id } = req.body;
-            this.friendService.addFriend(req.user.id, friend_id);
+            await this.friendService.addFriend(req.user.id, friend_id);
             // Call the friend service
             // return friend id
-            return res.status(200);
+            return res.status(200).json({message: "Friend added successfully"});
         } catch(error){
             res.status(401).json({message: error.message});
         }

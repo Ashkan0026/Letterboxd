@@ -16,11 +16,11 @@ class FeedbackController {
             }
 
             // Call the feedback service
-            this.feedbackService.addReply(description, rate, req.user.id, movieId);
+            await this.feedbackService.addReply(description, rate, req.user.id, movieId);
 
-            return res.status(204);
+            return res.status(204).json({message: "Feedback added successfully"});
         } catch(error){
-            res.status(401).json({message: error.message});
+            return res.status(401).json({message: error.message});
         }
     }
 
@@ -45,9 +45,9 @@ class FeedbackController {
             const userId = req.params.user_id;
 
             // Call the feedback service
-            let feedbacks = (await this.feedbackService.getUserReplies(userId)).replies;
+            let feedbacks = (await this.feedbackService.getUserReply(userId)).replies;
             // return feedbacks
-            return res.status(200).json({ feedbacks: [] });
+            return res.status(200).json({ feedbacks: feedbacks });
         } catch(error){
             res.status(401).json({message: error.message});
         }
@@ -59,7 +59,7 @@ class FeedbackController {
             const userId = req.user.id;
 
             // Call the feedback service
-            let feedbacks = (await this.feedbackService.getUserReplies(userId)).replies;
+            let feedbacks = (await this.feedbackService.getUserReply(userId)).replies;
             // return feedbacks
             return res.status(200).json({ feedbacks: [] });
         } catch(error){
@@ -73,7 +73,7 @@ class FeedbackController {
             const movieId = req.params.movie_id;
 
             // Call the feedback service
-            let feedbacks = (await this.feedbackService.getMovieReplies(movieId)).replies;
+            let feedbacks = (await this.feedbackService.getMovieReply(movieId)).replies;
             // return feedbacks
             return res.status(200).json({ feedbacks: [] });
         } catch(error){

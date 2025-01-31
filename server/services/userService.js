@@ -9,7 +9,7 @@ class UserService{
     async getUsers(){
         try{
             let users = db.getAllUsers();
-            return users
+            return users.users
         } catch (error){
             throw(error)
         }

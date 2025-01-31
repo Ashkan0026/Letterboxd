@@ -68,7 +68,7 @@ function initializeRepliesTable() {
 }   
 
 function getAllUsers() {
-    const stmt = db.prepare("SELECT * FROM users")
+    const stmt = db.prepare("SELECT username, created_at, isAdmin FROM users")
 
     try {
         const rows = stmt.all()
@@ -417,7 +417,7 @@ function getAllReplies() {
         const replies = rows.map(row => new Reply(row.id, row.score, row.desc, row.user_id, row.movie_id))
         return {replies: replies, success: true, message: ""}
     } catch(error) {
-        return {replies: [], success: false, message: error.message}
+        throw(error)
     }
 }
 
