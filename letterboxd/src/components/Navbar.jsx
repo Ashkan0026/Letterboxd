@@ -1,19 +1,35 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import '../styles/Navbar.css';
 
-function Navbar() {
-  const { token, logout } = useContext(AuthContext);
-
+const Navbar = () => {
   return (
-    <nav>
-      <ul style={{ listStyle: 'none', display: 'flex', gap: '20px' }}>
-        <li><Link to="/">Home</Link></li>
-        {!token && <li><Link to="/signup">Sign Up</Link></li>}
-        {token && <li><button onClick={logout}>Logout</button></li>}
-      </ul>
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="navbar-logo">
+          Letterboxd
+        </Link>
+        <ul className="nav-menu">
+          <li className="nav-item">
+            <Link to="/" className="nav-links">
+              Home
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/users" className="nav-links">
+              Users
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/signup" className="nav-links">
+              Signup
+            </Link>
+          </li>
+          {/* Add more navigation items here if needed */}
+        </ul>
+      </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
