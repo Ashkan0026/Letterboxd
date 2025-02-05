@@ -39,6 +39,7 @@ export const usersApi = {
     }
   },
   unfollowUser: (userId) => api.delete(`/friend/delete/${userId}`),
+  deleteUser: (userId) => api.delete(`/users/${userId}`)
 };
 
 // Auth API

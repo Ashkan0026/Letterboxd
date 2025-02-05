@@ -1,68 +1,118 @@
 .navbar {
+  background: #333;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  align-items: center;
+}
+
+.navbar-logo {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin-left: 20px;
+}
+
+.nav-links {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links:hover {
+  color: #f0a500;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  color: #f0a500;
+  font-weight: bold;
+}
+
+.logout-button {
+  background: #f0a500;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Hamburger Menu Icon */
+.menu-icon {
+  display: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: 60px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 60px);
     background: #333;
-    height: 60px;
-    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: left 0.3s ease;
   }
-  
-  .navbar-container {
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-    align-items: center;
+
+  .nav-menu.active {
+    left: 0;
   }
-  
-  .navbar-logo {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .nav-menu {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-  }
-  
+
   .nav-item {
-    margin-left: 20px;
+    margin: 20px 0;
   }
-  
+
   .nav-links {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s ease;
+    font-size: 1.2rem;
   }
-  
-  .nav-links:hover {
-    color: #f0a500;
-  }
-  
+
   .user-menu {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 20px;
   }
-  
-  .username {
-    color: #f0a500;
-    font-weight: bold;
-  }
-  
+
   .logout-button {
-    background: #f0a500;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: #333;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: bold;
+    font-size: 1rem;
+    padding: 10px 20px;
   }
+}

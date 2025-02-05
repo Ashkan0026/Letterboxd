@@ -57,7 +57,29 @@ function Users() {
     }
   };
 
-  
+  const handleDelete = async (delete_user_id) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError("Please login to follow users");
+      return;
+    }
+
+    try {
+      setDeleteLoading(prev => ({ ...prev, [delete_user_id]: true }))
+      const result = await usersApi.deleteUser(delete_user_id)
+      if (result.message) {
+        setError(null);
+        // Optional: Show success message
+      }
+      fetchUsers();
+    } catch (error) {
+      setError(error.message || 'Failed to follow user');
+      console.error('Follow error:', error);
+    }
+    finally {
+      setDeleteLoading(prev => ({ ...prev, [delete_user_id]: false }))
+    }
+  }
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -80,12 +102,13 @@ function Users() {
                   disabled={followLoading[user._id]}
                   onClick={() => handleFollow(user._id)}
                 >
-                  {followLoading[user._username] ? 'Following...' : 'Follow'}
+                  {followLoading[user._id] ? 'Following...' : 'Follow'}
                 </button>
                 {isAdmin && (
                   <button className="button"
                   disabled={deleteLoading[user._id]}
-                  >Delete</button>
+                  onClick={() => handleDelete(user._id)}
+                  >{deleteLoading[user._id] ? "Deleting..." : "Delete"}</button>
                 )}
                 </div>
             </div>
