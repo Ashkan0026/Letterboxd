@@ -59,7 +59,7 @@ function Users() {
         {users.map(user => (
           <li key={user._username} className="user-item">
             <div className="user-info">
-              <Link to={`/user/${user._username}`} className="user-link">
+              <Link to={`/user/${user._id}`} className="user-link">
                 <span className="user-name">{user._username}</span>
                 <br></br>
                 <span className="user-created">{new Date(user._createdAt).toLocaleDateString()}</span>

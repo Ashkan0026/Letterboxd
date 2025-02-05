@@ -13,7 +13,6 @@ class MoviesController {
           const { genre, from_published_year, to_published_year, from_rate, to_rate } = req.query;
           // Call the movie service
           let movies = (await this.movieService.getMovies(genre, from_published_year, to_published_year, from_rate, to_rate)).movies;
-
           // return all movies
           return res.status(200).json({ movies });
       } catch(error){

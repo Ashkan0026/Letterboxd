@@ -9,12 +9,14 @@ function Home() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const baseUrl = "http://localhost:9090"
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const response = await moviesApi.getAllMovies();
         setMovies(response.data.movies);
+        console.log(response.data.movies[0]._image_path)
       } catch (err) {
         setError(err.message);
       } finally {
@@ -32,16 +34,12 @@ function Home() {
       <h1>Movie List</h1>
       <div className="movie-list">
         {movies.map(movie => (
-          <Link to={`/movie/${movie.id}`} key={movie.id} className="movie-card">
-            <img src={movie.image_path} alt={movie.title} className="movie-image" />
+          <Link to={`/movie/${movie._id}`} key={movie.id} className="movie-card">
+            <img src={`${baseUrl}${movie._image_path}`} alt={movie.title} className="movie-image" />
             <div className="movie-details">
-              <h2 className="movie-title">{movie.title}</h2>
-              <p className="movie-year">{movie.year}</p>
-              <p className="movie-description">{movie.description}</p>
-            </div>
-            <div className="movie-user">
-              <img src={movie.user.profilePicture} alt={movie.user.name} className="user-profile" />
-              <span className="user-name">{movie.user.name}</span>
+              <h2 className="movie-title">{movie._title}</h2>
+              <p className="movie-year">{movie._build_year}</p>
+              <p className="movie-description">{movie._desc}</p>
             </div>
           </Link>
         ))}

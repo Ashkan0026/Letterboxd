@@ -11,6 +11,8 @@ const cors = require("cors");
 require("dotenv").config()
 
 const app = express()
+
+
 app.use(express.json())
 
 const port = process.env.PORT || 9090
@@ -19,6 +21,8 @@ const db_dir = process.env.DB_DIR || "database"
 
 // add routes here
 app.use(cors());
+app.use('/resources/images', express.static(path.join(__dirname, 'resources/images')));
+
 app.use('/api', authenticationRoutes);
 app.use('/api', moviesRoutes);
 app.use('/api', userRoutes);

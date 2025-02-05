@@ -69,7 +69,7 @@ function initializeRepliesTable() {
 }   
 
 function getAllUsers() {
-    const stmt = db.prepare("SELECT username, created_at, isAdmin FROM users")
+    const stmt = db.prepare("SELECT id, username, created_at, isAdmin FROM users")
 
     try {
         const rows = stmt.all()
