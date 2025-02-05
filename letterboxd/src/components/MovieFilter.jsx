@@ -4,10 +4,10 @@ import '../styles/MovieFilter.css'
 const MovieFilter = ({ onFilter }) => {
   const [filters, setFilters] = useState({
     genre: '',
-    fromPublishedYear: '',
-    toPublishedYear: '',
-    fromRate: '',
-    toRate: '',
+    from_published_year: '',
+    to_published_year: '',
+    from_rate: '',
+    to_rate: '',
   });
 
   const handleChange = (e) => {
@@ -46,9 +46,9 @@ const MovieFilter = ({ onFilter }) => {
         <label htmlFor="fromPublishedYear">From Published Year</label>
         <input
           type="number"
-          id="fromPublishedYear"
-          name="fromPublishedYear"
-          value={filters.fromPublishedYear}
+          id="from_published_year"
+          name="from_published_year"
+          value={filters.from_published_year}
           onChange={handleChange}
           placeholder="e.g., 1990"
           min="1900"
@@ -60,9 +60,9 @@ const MovieFilter = ({ onFilter }) => {
         <label htmlFor="toPublishedYear">To Published Year</label>
         <input
           type="number"
-          id="toPublishedYear"
-          name="toPublishedYear"
-          value={filters.toPublishedYear}
+          id="to_published_year"
+          name="to_published_year"
+          value={filters.to_published_year}
           onChange={handleChange}
           placeholder="e.g., 2023"
           min="1900"
@@ -74,14 +74,14 @@ const MovieFilter = ({ onFilter }) => {
         <label htmlFor="fromRate">From Rate</label>
         <input
           type="number"
-          id="fromRate"
-          name="fromRate"
-          value={filters.fromRate}
+          id="from_rate"
+          name="from_rate"
+          value={filters.from_rate}
           onChange={handleChange}
           placeholder="e.g., 5"
           min="0"
           max="10"
-          step="0.1"
+          step="0.5"
         />
       </div>
 
@@ -89,14 +89,14 @@ const MovieFilter = ({ onFilter }) => {
         <label htmlFor="toRate">To Rate</label>
         <input
           type="number"
-          id="toRate"
-          name="toRate"
-          value={filters.toRate}
+          id="to_rate"
+          name="to_rate"
+          value={filters.to_rate}
           onChange={handleChange}
           placeholder="e.g., 10"
           min="0"
           max="10"
-          step="0.1"
+          step="0.5"
         />
       </div>
 

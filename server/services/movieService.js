@@ -17,6 +17,7 @@ class MovieService {
                 return []
             }
             let movies = res.movies
+            console.log(to_rate, from_rate)
             // filter movies
             if (genre && genre !== "All Genres") {
                 movies = movies.filter(movie => movie.genre.toLowerCase().indexOf(genre.toLowerCase()) !== -1)
@@ -28,10 +29,10 @@ class MovieService {
                 movies = movies.filter(movie => movie._build_year <= to_published_year)
             }
             if (from_rate) {
-                movies = movies.filter(movie => movie.rate >= from_rate)
+                movies = movies.filter(movie => movie._rate >= from_rate)
             }
             if (to_rate) {
-                movies = movies.filter(movie => movie.rate <= to_rate)
+                movies = movies.filter(movie => movie._rate <= to_rate)
             }
 
             return movies
