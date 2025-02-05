@@ -4,12 +4,20 @@ import { usersApi } from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import '../styles/Users.css'; // Import the CSS file
 
+const useCheckIfIsAdmin = () => {
+  const {role} = useContext(AuthContext)
+  console.log(role)
+  return role === 'admin'
+}
+
 function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const isAdmin = useCheckIfIsAdmin()
   const [followLoading, setFollowLoading] = useState({});
   const { username } = useContext(AuthContext);
+  const [deleteLoading, setDeleteLoading] = useState({})
 
 
   useEffect(() => {
@@ -49,6 +57,8 @@ function Users() {
     }
   };
 
+  
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -65,12 +75,17 @@ function Users() {
                 <span className="user-created">{new Date(user._createdAt).toLocaleDateString()}</span>
               </Link>
               <button
-                className="follow-button"
+                className="button"
                 disabled={followLoading[user._id]}
                 onClick={() => handleFollow(user._username)}
               >
                 {followLoading[user._username] ? 'Following...' : 'Follow'}
               </button>
+              {isAdmin && (
+                <button className="button"
+                disabled={deleteLoading[user._id]}
+                >Delete</button>
+              )}
             </div>
           </li>
         ))}

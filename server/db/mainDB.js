@@ -11,11 +11,11 @@ function initialize(dbPath) {
         return
     }
     db = new sqliteDatabase(dbPath)
-    initializeUsersTable()
-    initializeFollowsTable()
-    initializeMoviesTable()
-    initializeRepliesTable()
-    insertUsersInBatch()
+    // initializeUsersTable()
+    // initializeFollowsTable()
+    // initializeMoviesTable()
+    // initializeRepliesTable()
+    // insertUsersInBatch()
 }
 
 function initializeUsersTable() {

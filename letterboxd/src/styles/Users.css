@@ -14,6 +14,13 @@
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 4px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition for transform and shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Initial shadow */
+}
+
+.user-item:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
 }
 
 .user-info {
@@ -28,8 +35,8 @@
   flex-grow: 1;
 }
 
-.follow-button {
-  background-color: #00b020;
+.button {
+  background-color: #f0a500;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -39,7 +46,7 @@
 }
 
 .follow-button:hover {
-  background-color: #008010;
+  background-color: #f0a500;
 }
 
 .follow-button {
