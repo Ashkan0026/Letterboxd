@@ -8,11 +8,11 @@ class FriendController {
     // add a new friend
     async addFriend(req, res){
         try{
-            const { following_username } = req.body;
-            if (!req.body.following_username) {
+            const { following_user_id } = req.body;
+            if (!following_user_id) {
                 return res.status(400).json({ message: "Following username is required" });
             }
-            const result = await this.friendService.addFriend(req.body.follower_username, req.body.following_username);
+            const result = await this.friendService.addFriend(req.user.id, following_user_id);
             if (!result.success) {
                 return res.status(400).json({ message: result.message });
             }

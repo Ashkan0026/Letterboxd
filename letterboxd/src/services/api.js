@@ -30,9 +30,9 @@ export const usersApi = {
   getUserByUsername: (username) => api.get(`/user/${username}`),
   deleteUser: (userId) => api.delete(`/users/${userId}`),
   editUser: (userId, userData) => api.put(`/users/${userId}`, userData),
-  followUser: async (follower_username, following_username) => {
+  followUser: async (following_user_id) => {
     try {
-      const response = await api.post(`/friend/add`, { follower_username: follower_username , following_username: following_username });
+      const response = await api.post(`/friend/add`, { following_user_id: following_user_id });
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Failed to follow user');

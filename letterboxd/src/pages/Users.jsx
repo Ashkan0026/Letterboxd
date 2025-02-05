@@ -35,15 +35,15 @@ function Users() {
     }
   };
 
-  const handleFollow = async (following_username) => {
+  const handleFollow = async (following_user_id) => {
     const token = localStorage.getItem('token');
     if (!token) {
       setError("Please login to follow users");
       return;
     }
     try {
-      setFollowLoading(prev => ({ ...prev, [following_username]: true }));
-      const result = await usersApi.followUser(username, following_username);
+      setFollowLoading(prev => ({ ...prev, [following_user_id]: true }));
+      const result = await usersApi.followUser(following_user_id);
       if (result.message) {
         setError(null);
         // Optional: Show success message
@@ -53,7 +53,7 @@ function Users() {
       setError(err.message || 'Failed to follow user');
       console.error('Follow error:', err);
     } finally {
-      setFollowLoading(prev => ({ ...prev, [following_username]: false }));
+      setFollowLoading(prev => ({ ...prev, [following_user_id]: false }));
     }
   };
 
@@ -77,7 +77,7 @@ function Users() {
               <button
                 className="button"
                 disabled={followLoading[user._id]}
-                onClick={() => handleFollow(user._username)}
+                onClick={() => handleFollow(user._id)}
               >
                 {followLoading[user._username] ? 'Following...' : 'Follow'}
               </button>

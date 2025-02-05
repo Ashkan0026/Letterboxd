@@ -18,10 +18,10 @@ class FriendService{
 
 
 
-    async addFriend(follower_username, following_username){
+    async addFriend(follower_user_id, following_user_id){
         try{
 
-            var follow = new Follows(0, following_username, follower_username, new Date());
+            var follow = new Follows(0, following_user_id, follower_user_id, new Date());
             let res = db.insertFollows(follow);
             return res
         } catch (error){

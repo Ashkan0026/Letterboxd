@@ -201,10 +201,10 @@ function checkIfUserExists(username) {
  * @param {Follows} follows 
  */
 function insertFollows(follows) {
-    const insertStmt = db.prepare("INSERT INTO follows (following_username, follower_username, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)")
+    const insertStmt = db.prepare("INSERT INTO follows (following_user_id, follower_user_id, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)")
 
     try {
-        insertStmt.run(follows._following_username, follows._follower_username)
+        insertStmt.run(follows._following_user_id, follows._follower_user_id)
         return {success: true, message: "Follow entry added successfully"}
     } catch(error) {
         return {success: false, message: error.message}
