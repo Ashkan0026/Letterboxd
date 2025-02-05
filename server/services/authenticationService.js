@@ -21,19 +21,19 @@ class AuthenticationService {
                     {
                         role = 'admin'
                     }
-                    let req = {id: user.user.id, role: role}
+                    let req = {id: user.user._id, role: role}
                     let token = generateToken(req)
-                    return token
+                    return {token: token, user_id: user.user._id, isAdmin: user.user._isAdmin}
                 } else {
                     throw new Error("Invalid password")
                 }
             }
 
             // if user not exist, register user
-            let user_id = this.register(username, password)
-            let req = {id: user_id, role: role}
+            let res = await this.register(username, password)
+            let req = {id: res.user_id, role: 'user'}
             let token = generateToken(req)
-            return token
+            return {token: token, user_id: res.user_id, isAdmin: res.isAdmin}
         } catch (error){
             throw(error)
         }
@@ -45,7 +45,7 @@ class AuthenticationService {
         {
             let user = new User(0, username, password, new Date(), false)
             let res = db.insertSignupUser(user)
-            return res.user_id
+            return {user_id: res.user_id, isAdmin: res.isAdmin}
         } catch (error){
             throw(error)
         }

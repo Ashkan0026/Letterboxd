@@ -9,8 +9,8 @@ class AuthenticationController {
   async login(req, res){
     try{
         const {username, password} = req.body;
-        let token = await this.authenticationService.login(username, password, 'user');
-        return res.status(200).json({ token });
+        let data = await this.authenticationService.login(username, password, 'user');
+        return res.status(200).json({ data });
     } catch(error){
       res.status(401).json({message: error.message});
     }

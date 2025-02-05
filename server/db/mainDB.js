@@ -142,11 +142,10 @@ function insertSignupUser(user) {
         return {success: false, message: "User already exists"}
     }
 
-    const insertStmt = db.prepare("INSERT INTO users (username, password, created_at, isAdmin) VALUES (?, ?, CURRENT_TIMESTAMP, ?)")
+    const insertStmt = db.prepare("INSERT INTO users (username, password, created_at, isAdmin) VALUES (?, ?, CURRENT_TIMESTAMP, ?) RETURNING id, isAdmin")
     try {
-        insertStmt.run(user._username, user._password, user._isAdmin ? 1 : 0)
-        const user_id = db.prepare("SELECT id FROM users WHERE username = ?").get(user._username).id
-        return {success: true, message: "User added successfully", user_id: user_id}
+        const res = insertStmt.run(user._username, user._password, user._isAdmin ? 1 : 0)
+        return {success: true, message: "User added successfully", user_id: res.id, isAdmin: res.isAdmin}
     }
     catch(error) {
         console.log(error)

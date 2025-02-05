@@ -17,9 +17,9 @@ function SignUp() {
     setLoading(true);
     try {
       const response = await authApi.login({ username, password });
-      const { token } = response.data;
-      const role = 'user'; // Default role, server should ideally send this
-      login(token, role, username);
+      const data = response.data;
+      const role = data.data.isAdmin ? 'admin' : 'user'; // Default role, server should ideally send this
+      login(data.data.token, role, username);
       navigate('/');
     } catch (error) {
       setError(error.response?.data?.message || 'Login failed');

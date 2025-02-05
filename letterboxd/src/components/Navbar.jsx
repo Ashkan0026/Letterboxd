@@ -4,8 +4,10 @@ import { AuthContext } from '../context/AuthContext';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
-  const { token, username, logout } = useContext(AuthContext);
+  const { token, username, logout, role } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const adminExpression = role ? "(Admin)" : ""
 
   const handleLogout = () => {
     logout();
@@ -35,7 +37,7 @@ const Navbar = () => {
             </li>
           ) : (
             <li className="nav-item user-menu">
-              <span className="nav-links username">{username}</span>
+              <span className="nav-links username">{username} {adminExpression}</span>
               <button onClick={handleLogout} className="logout-button">Logout</button>
             </li>
           )}

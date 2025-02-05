@@ -72,20 +72,22 @@ function Users() {
               <Link to={`/user/${user._id}`} className="user-link">
                 <span className="user-name">{user._username}</span>
                 <br></br>
-                <span className="user-created">{new Date(user._createdAt).toLocaleDateString()}</span>
+                <span className="user-created">{new Date(user._createdAt).toDateString()}</span>
               </Link>
-              <button
-                className="button"
-                disabled={followLoading[user._id]}
-                onClick={() => handleFollow(user._id)}
-              >
-                {followLoading[user._username] ? 'Following...' : 'Follow'}
-              </button>
-              {isAdmin && (
-                <button className="button"
-                disabled={deleteLoading[user._id]}
-                >Delete</button>
-              )}
+              <div class="btn-con">
+                <button
+                  className="button"
+                  disabled={followLoading[user._id]}
+                  onClick={() => handleFollow(user._id)}
+                >
+                  {followLoading[user._username] ? 'Following...' : 'Follow'}
+                </button>
+                {isAdmin && (
+                  <button className="button"
+                  disabled={deleteLoading[user._id]}
+                  >Delete</button>
+                )}
+                </div>
             </div>
           </li>
         ))}
