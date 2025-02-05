@@ -8,24 +8,24 @@ class FriendController {
     // add a new friend
     async addFriend(req, res){
         try{
-            const { friend_id } = req.body;
-            await this.friendService.addFriend(req.user.id, friend_id);
-            // Call the friend service
-            // return friend id
+            const { following_username } = req.body;
+            if (!req.body.following_username) {
+                return res.status(400).json({ message: "Following username is required" });
+            }
+            const result = await this.friendService.addFriend(req.body.follower_username, req.body.following_username);
+            if (!result.success) {
+                return res.status(400).json({ message: result.message });
+            }
             return res.status(200).json({message: "Friend added successfully"});
         } catch(error){
-            res.status(401).json({message: error.message});
+            res.status(500).json({message: error.message});
         }
     }
 
-    // get friends of user by user_id in JWT
     async getMyFriends(req, res){
         try{
-            const userId = req.user.id;
-            let friends = (await this.friendService.getFriends(userId)).followers; 
-            // Call the friend service
-
-            // return friends
+            const username = req.user.id;//todo
+            let friends = (await this.friendService.getFriends(username)).followers;
             return res.status(200).json({ friends });
         } catch(error){
             res.status(401).json({message: error.message});
@@ -48,6 +48,6 @@ class FriendController {
         }
     }
   
-  }
+}
   
-  module.exports = FriendController;
+module.exports = FriendController;

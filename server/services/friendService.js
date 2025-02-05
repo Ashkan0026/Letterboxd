@@ -7,19 +7,21 @@ class FriendService{
         this.db = db
     }
 
-    async getFriends(userId){
+    async getFriends(username){
         try{
-            let friends = db.getUserFollowers(userId);
+            let friends = db.getUserFollowers(username);
             return friends
         } catch (error){
             throw(error)
         }
     }
 
-    async addFriend(userId, friendId){
+
+
+    async addFriend(follower_username, following_username){
         try{
 
-            var follow = new Follows(0, friendId, userId, new Date());
+            var follow = new Follows(0, following_username, follower_username, new Date());
             let res = db.insertFollows(follow);
             return res
         } catch (error){

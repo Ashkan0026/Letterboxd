@@ -7,6 +7,7 @@ const authenticationRoutes = require('./routes/authentication');
 const userRoutes = require('./routes/user');
 const feedbackRoutes = require('./routes/feedback');
 const friendsRoutes = require('./routes/freind');
+const cors = require("cors");
 require("dotenv").config()
 
 const app = express()
@@ -17,7 +18,8 @@ const db_file = process.env.DB_FILE || "main.db"
 const db_dir = process.env.DB_DIR || "database"
 
 // add routes here
-app.use('/api', authenticationRoutes);  
+app.use(cors());
+app.use('/api', authenticationRoutes);
 app.use('/api', moviesRoutes);
 app.use('/api', userRoutes);
 app.use('/api', feedbackRoutes);

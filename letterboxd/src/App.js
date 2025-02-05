@@ -4,7 +4,6 @@ import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
 import SignUp from './pages/Signup';
 import Admin from './pages/Admin';
-//import MovieDetail from './pages/MovieDetail';
 import Users from './pages/Users'; // Import Users page
 import UserDetail from './pages/UserDetail'; // Import UserDetail page
 import Navbar from './components/Navbar';

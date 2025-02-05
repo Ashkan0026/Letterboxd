@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { authApi } from '../services/api';
 import '../styles/Signup.css'; // Import the CSS file
 
 function SignUp() {
@@ -8,19 +9,29 @@ function SignUp() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Simulate a login with a fake token and role
-    const token = 'fake-access-token';
-    const role = 'user'; // Default role
-    login(token, role);
-    navigate('/');
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      const response = await authApi.login({ username, password });
+      const { token } = response.data;
+      const role = 'user'; // Default role, server should ideally send this
+      login(token, role, username);
+      navigate('/');
+    } catch (error) {
+      setError(error.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="signup-container">
       <h1>Sign Up</h1>
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="signup-form">
         <div className="form-group">
           <label htmlFor="username">Username</label>
@@ -28,7 +39,7 @@ function SignUp() {
             type="text"
             id="username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(event) => setUsername(event.target.value)}
             placeholder="Enter your username"
             required
           />
@@ -39,13 +50,13 @@ function SignUp() {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
             placeholder="Enter your password"
             required
           />
         </div>
-        <button type="submit" className="signup-button">
-          Sign Up
+        <button type="submit" className="signup-button" disabled={loading}>
+          {loading ? 'Signing in...' : 'Sign In'}
         </button>
       </form>
     </div>

@@ -44,3 +44,25 @@
   .nav-links:hover {
     color: #f0a500;
   }
+  
+  .user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .username {
+    color: #f0a500;
+    font-weight: bold;
+  }
+  
+  .logout-button {
+    background: #f0a500;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #333;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }

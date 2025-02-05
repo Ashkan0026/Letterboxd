@@ -15,6 +15,15 @@ class UserService{
         }
     }
 
+    async getUserByUsername(username) {
+        try {
+            let user = db.getUserByUsername(username);
+            return user.user;
+        } catch (error) {
+            throw(error);
+        }
+    }
+
     async deleteUser(userId){
         try{
             let res = db.deleteUser(userId);
@@ -33,8 +42,6 @@ class UserService{
             throw(error)
         }
     }
-
-
 }
 
 module.exports = UserService;

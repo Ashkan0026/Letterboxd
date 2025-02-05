@@ -15,6 +15,7 @@ function initialize(dbPath) {
     initializeFollowsTable()
     initializeMoviesTable()
     initializeRepliesTable()
+    insertUsersInBatch()
 }
 
 function initializeUsersTable() {
@@ -34,10 +35,10 @@ function initializeFollowsTable() {
     db.exec(`
         CREATE TABLE IF NOT EXISTS follows(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT FAIL, 
-        following_user_id INTEGER NOT NULL ON CONFLICT FAIL REFERENCES [users]([id]) ON DELETE CASCADE ON UPDATE CASCADE, 
-        follower_user_id INTEGER NOT NULL ON CONFLICT FAIL REFERENCES [users]([id]) ON DELETE CASCADE ON UPDATE CASCADE, 
+        following_username VARCHAR(30) NOT NULL ON CONFLICT FAIL REFERENCES [users]([username]) ON DELETE CASCADE ON UPDATE CASCADE, 
+        follower_username VARCHAR(30) NOT NULL ON CONFLICT FAIL REFERENCES [users]([username]) ON DELETE CASCADE ON UPDATE CASCADE, 
         created_at TIMESTAMP NOT NULL ON CONFLICT FAIL DEFAULT CURRENT_TIMESTAMP,
-        CHECK(following_user_id != follower_user_id)
+        CHECK(following_username != follower_username)
         );
     `);
 }
@@ -200,10 +201,10 @@ function checkIfUserExists(username) {
  * @param {Follows} follows 
  */
 function insertFollows(follows) {
-    const insertStmt = db.prepare("INSERT INTO follows (following_user_id, follower_user_id, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)")
+    const insertStmt = db.prepare("INSERT INTO follows (following_username, follower_username, created_at) VALUES (?, ?, CURRENT_TIMESTAMP)")
 
     try {
-        insertStmt.run(follows._following_user_id, follows._follower_user_id)
+        insertStmt.run(follows._following_username, follows._follower_username)
         return {success: true, message: "Follow entry added successfully"}
     } catch(error) {
         return {success: false, message: error.message}
@@ -214,18 +215,19 @@ function getFollow(follows_id) {
     const getStmt = db.prepare("SELECT * FROM follows WHERE id = ?")
     try {
         const followData = getStmt.get(follows_id)
-        const follow = new Follows(followData.id, followData.following_user_id, followData.follower_user_id, followData.created_at)
+        const follow = new Follows(followData.id, followData.following_username, followData.follower_username,
+            followData.created_at)
         return {follow: follow, success: true, message: ""}
     } catch(error) {
         return {follow: null, success: false, message: error.message}
     }
 }
 
-function getUserFollowers(user_id) {
-    const stmt = db.prepare(`SELECT users.id AS id, users.username AS username, users.created_at AS createdAt, users.isAdmin AS isAdmin FROM users INNER JOIN follows WHERE users.id = follows.follower_user_id AND follows.following_user_id = ?`)
+function getUserFollowers(username) {
+    const stmt = db.prepare(`SELECT users.id AS id, users.username AS username, users.created_at AS createdAt, users.isAdmin AS isAdmin FROM users INNER JOIN follows WHERE users.username = follows.follower_username AND follows.following_username = ?`)
     
     try {
-        const rows = stmt.all(user_id)
+        const rows = stmt.all(username)
         const followers = rows.map(row => new User(row.id, row.username, "", row.createdAt, row.isAdmin))
 
         return {followers: followers, success: true, message: "All followers"}
@@ -234,10 +236,10 @@ function getUserFollowers(user_id) {
     }
 }
 
-function getUserFollowings(user_id) {
-    const stmt = db.prepare("SELECT users.id AS id, users.username AS username, users.created_at AS created_at, users.isAdmin AS isAdmin FROM users INNER JOIN follows WHERE users.id = follows.following_user_id AND follows.follower_user_id = ?;")
+function getUserFollowings(username) {
+    const stmt = db.prepare("SELECT users.id AS id, users.username AS username, users.created_at AS created_at, users.isAdmin AS isAdmin FROM users INNER JOIN follows WHERE users.username = follows.following_username AND follows.follower_username = ?;")
     try {
-        const rows =  stmt.all(user_id)
+        const rows =  stmt.all(username)
         const followings = rows.map(row => new User(row.id, row.username, "", row.createdAt, row.isAdmin))
         
         return {followings: followings, success: true, message: "All followings"}
@@ -247,7 +249,7 @@ function getUserFollowings(user_id) {
 }
 
 function deleteFollows(follower_id, following_id){
-    const stmt = db.prepare("DELETE FROM follows WHERE follower_user_id = ? AND following_user_id = ?")
+    const stmt = db.prepare("DELETE FROM follows WHERE follower_username = ? AND following_username = ?")
     try {
         stmt.run(follower_id, following_id)
         return {success: true, message: "Follow entry deleted successfully"}
@@ -468,9 +470,61 @@ function deleteReply(reply_id) {
     }
 }
 
+function insertUsersInBatch() {
+    const stmt = db.prepare("INSERT INTO users (username, password, created_at, isAdmin) VALUES (?, ?, ?, ?)");
+
+    const insertMany = db.transaction((users) => {
+        for (const user of users) {
+            console.log("Inserting user:", user);
+            stmt.run(user.username, user.password, user.created_at, user.isAdmin ? 1 : 0);
+        }
+    });
+
+    try {
+        insertMany([
+            { username: "admin__user", password: "admin123", created_at: getRandomPastDate(), isAdmin: true }, // Admin user
+            { username: "user1", password: "password1", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user2", password: "password2", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user3", password: "password3", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user4", password: "password4", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user5", password: "password5", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user6", password: "password6", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user7", password: "password7", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user8", password: "password8", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user9", password: "password9", created_at: getRandomPastDate(), isAdmin: false },
+            { username: "user10", password: "password10", created_at: getRandomPastDate(), isAdmin: false }
+        ]);
+        console.log("10 users added successfully!");
+    } catch (error) {
+        console.log("Error inserting users:", error.message);
+    }
+}
+
+function getRandomPastDate() {
+    const pastYear = new Date();
+    pastYear.setFullYear(pastYear.getFullYear() - 1); // Set to one year ago
+    return new Date(pastYear.getTime() + Math.random() * (Date.now() - pastYear.getTime()))
+        .toISOString().slice(0, 19).replace("T", " "); // Convert to YYYY-MM-DD HH:MM:SS
+}
+
+function getUserByUsername(username) {
+    const stmt = db.prepare("SELECT * FROM users WHERE username = ? LIMIT 1")
+    
+    try {
+        const userData = stmt.get(username)
+        if(userData) {
+            return {user: new User(userData.id, userData.username, "", userData.created_at, userData.isAdmin), success: true, message: "User found"};
+        }
+        return {user: null, success: false, message: "User not found"};
+    } catch(error) {
+        return {user: null, success: false, message: error.message}
+    }
+}
+
 module.exports = {
     initialize,
     getSpecifiedUser,
+    getUserByUsername,
     getSpecifiedUserForLogin,
     insertSignupUser,
     checkIfUserExists,

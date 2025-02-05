@@ -1,8 +1,8 @@
 class Follows {
-    constructor(id, following_user_id, follower_user_id, createdAt) {
+    constructor(id, following_username, follower_username, createdAt) {
         this._id = id;
-        this._following_user_id = following_user_id;
-        this._follower_user_id = follower_user_id; 
+        this._following_username = following_username;
+        this._follower_username = follower_username;
         this._createdAt = createdAt;
     }
 
@@ -12,23 +12,23 @@ class Follows {
     }
 
     // Getter for following user ID
-    get following_user_id() {
-        return this._following_user_id;
+    get following_username() {
+        return this._following_username;
     }
 
     // Setter for following user ID
-    set following_user_id(value) {
-        this._following_user_id = value;
+    set following_username(value) {
+        this._following_username = value;
     }
 
     // Getter for follower user ID
-    get follower_user_id() {
-        return this._follower_user_id;
+    get follower_username() {
+        return this._follower_username;
     }
 
     // Setter for follower user ID
-    set follower_user_id(value) {
-        this._follower_user_id = value;
+    set follower_username(value) {
+        this._follower_username = value;
     }
 
     // Getter for createdAt
@@ -37,7 +37,7 @@ class Follows {
     }
 
     displayInfo() {
-        console.log(`${this._id} ${this._following_user_id} ${this._follower_user_id}`)
+        console.log(`${this._id} ${this._following_username} ${this._follower_username}`)
     }
 }
 

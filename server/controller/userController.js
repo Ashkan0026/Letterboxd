@@ -9,22 +9,27 @@ class UserController {
     // get all users
     async getUsers(req, res){
         try{
-            // Call the user service
             let users = await this.userService.getUsers();
-            // return all users
             return res.status(200).json({ users});
         } catch(error){
             res.status(401).json({message: error.message});
         }
     }
 
-    // delete a user
+    // get user by username
+    async getUserByUsername(req, res) {
+        try {
+            const username = req.params.username;
+            let user = await this.userService.getUserByUsername(username);
+            return res.status(200).json({ user });
+        } catch(error) {
+            res.status(404).json({message: error.message});
+        }
+    }
+
     async deleteUser(req, res){
         try{
-            const userId = req.params.user_id;
-
-            // Call the user service
-            this.userService.deleteUser(userId);
+            this.userService.deleteUser(req.params.username);
 
             return res.status(200).json({ message: 'User deleted successfully' });
         } catch(error){
@@ -32,13 +37,11 @@ class UserController {
         }
     }
 
-    // edit a user
     async editUser(req, res){
         try{
-            const userId = req.params.user_id;
+            const userId = req.params.username;
             const { username, email, password } = req.body;
-
-            // Call the user service
+            //todo not implemented
 
             return res.status(200).json({ message: 'User edited successfully' });
         } catch(error){
@@ -46,6 +49,6 @@ class UserController {
         }
     }
   
-  }
+}
   
-  module.exports = UserController;
+module.exports = UserController;

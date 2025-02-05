@@ -1,46 +1,31 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { moviesApi } from '../services/api';
 import '../styles/Home.css'; // Import the CSS file
-
-const movies = [
-  {
-    id: 1,
-    title: 'Inception',
-    year: 2010,
-    image_path: 'https://via.placeholder.com/300x400',
-    description: 'A thief who steals corporate secrets through the use of dream-sharing technology.',
-    user: {
-      name: 'John Doe',
-      profilePicture: 'https://via.placeholder.com/50',
-    },
-  },
-  {
-    id: 2,
-    title: 'Interstellar',
-    year: 2014,
-    image_path: 'https://via.placeholder.com/300x400',
-    description: 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.',
-    user: {
-      name: 'Jane Smith',
-      profilePicture: 'https://via.placeholder.com/50',
-    },
-  },
-  {
-    id: 3,
-    title: 'The Dark Knight',
-    year: 2008,
-    image_path: 'https://via.placeholder.com/300x400',
-    description: 'When the menace known as the Joker emerges, Batman must confront chaos.',
-    user: {
-      name: 'Alice Brown',
-      profilePicture: 'https://via.placeholder.com/50',
-    },
-  },
-];
 
 function Home() {
   const { token } = useContext(AuthContext);
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await moviesApi.getAllMovies();
+        setMovies(response.data.movies);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovies();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="home-container">

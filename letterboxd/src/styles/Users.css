@@ -1,50 +1,52 @@
 .users-container {
-    padding: 2rem;
-    background-color: #f0f2f5;
-    font-family: Arial, sans-serif;
-  }
-  
-  .users-container h1 {
-    font-size: 2.5rem;
-    color: #333;
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .users-list {
-    list-style: none;
-    padding: 0;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  
-  .user-item {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .user-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .user-link {
-    display: block;
-    padding: 1.5rem;
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .user-name {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .user-email {
-    font-size: 1rem;
-    color: #777;
-  }
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.users-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-link {
+  text-decoration: none;
+  color: #333;
+  flex-grow: 1;
+}
+
+.follow-button {
+  background-color: #00b020;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.follow-button:hover {
+  background-color: #008010;
+}
+
+.follow-button {
+  cursor: pointer;
+}
+
+.follow-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
