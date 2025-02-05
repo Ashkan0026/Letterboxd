@@ -16,7 +16,7 @@ function Home() {
     try {
       const response = await moviesApi.getAllMovies(filters);
       setMovies(response.data.movies);
-      console.log(response.data.movies[0])
+      console.log(response.data.movies)
     } catch (err) {
       setError(err.message);
     } finally {
@@ -37,13 +37,13 @@ function Home() {
       <h1>Movie List</h1>
       <div className="movie-list">
         {movies.map(movie => (
-          <Link to={`/movie/${movie._id}`} key={movie.id} className="movie-card">
+          <Link to={`/movie/${movie._id}`} className="movie-card">
             <img src={`${baseUrl}${movie._image_path}`} alt={movie.title} className="movie-image" />
             <div className="movie-details">
               <h2 className="movie-title">{movie._title}</h2>
-              <h5 className="movie-genre">{movie._genre}</h5>
-              <p className="movie-year">{movie._build_year}</p>
-              <p className="movie-description">{movie._desc}</p>
+              <h5 className="movie-genre">Genre: {movie._genre}</h5>
+              <h6 className="movie-rate">{movie._rate}</h6>
+              <p className="movie-year">Published Year: {movie._build_year}</p>
             </div>
           </Link>
         ))}

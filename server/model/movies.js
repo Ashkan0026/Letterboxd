@@ -1,12 +1,13 @@
 class Movie {
-    constructor(id, title, desc, genre, image_path, build_year, added_by) {
+    constructor(id, title, desc, genre, image_path, build_year, added_by, rate) {
         this._id = id
         this._title = title
         this._desc = desc
         this._genre = genre
         this._image_path = image_path
         this._build_year = build_year
-        this._added_by = added_by
+        this._added_by = added_by,
+        this._rate = rate
     }
 
     // Getter for ID
@@ -72,6 +73,14 @@ class Movie {
     // Setter for added by
     set added_by(value) {
         this._added_by = value;
+    }
+
+    get rate() {
+        return this._rate
+    }
+
+    set rate(value) {
+        this._rate = value
     }
 }
 

@@ -13,21 +13,25 @@
   /* Grid layout for movies */
   .movie-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
   }
   
   .movie-card {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     background: #1c1c1c; /* Dark background */
     text-decoration: none;
     color: #f0f0f0; /* Light text color */
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); /* Darker shadow */
     overflow: hidden;
+    max-width: 20rem;
+    min-width: 14rem;
+    max-height: 30rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+  }
 
 .movie-card:hover {
     transform: translateY(-5px);
@@ -36,24 +40,21 @@
 
 .movie-image {
     width: 100%;
-    height: auto;
+    height: 14rem;
     display: block;
     border-bottom: 2px solid #444; /* Subtle border for separation */
 }
 
 .movie-details {
-    padding: 15px;
-    flex-grow: 1;
+  padding: 0.5rem 1rem;
 }
 
 .movie-title {
-    margin: 0 0 10px;
     font-size: 1.3rem;
     color: #f0a500; /* Lighter title color */
 }
 
 .movie-year {
-    margin: 0 0 10px;
     color: #bbb; /* Softer year color */
     font-size: 0.9rem;
 }
@@ -68,17 +69,8 @@
   .movie-user {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
     border-top: 1px solid #eee;
     background: #f9f9f9;
-  }
-  
-  .user-profile {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
   }
   
   .user-name {
@@ -98,6 +90,44 @@
     transition: background-color 0.3s ease;
   }
   
+  .movie-rate {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff; /* White text */
+    background-color: transparent;
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .movie-rate:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3); /* Enhanced shadow on hover */
+  }
+  
+  /* Optional: Add a star icon before the rating */
+  .movie-rate::before {
+    content: '★'; /* Star icon */
+    margin-right: 0.5rem;
+    color: #ffcc00; /* Yellow star */
+  }
+  
+  /* Optional: Different colors based on rating */
+  .movie-rate.low {
+    background-color: #dc3545; /* Red for low ratings */
+  }
+  
+  .movie-rate.medium {
+    background-color: #ffc107; /* Yellow for medium ratings */
+  }
+  
+  .movie-rate.high {
+    background-color: #28a745; /* Green for high ratings */
+  }
+
   .signup-button:hover {
     background-color: #555;
   }

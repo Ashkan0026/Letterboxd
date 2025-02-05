@@ -38,7 +38,7 @@ const MovieFilter = ({ onFilter }) => {
           <option value="comedy">Comedy</option>
           <option value="drama">Drama</option>
           <option value="horror">Horror</option>
-          <option value="sci-fi">Sci-Fi</option>
+          <option value="war">War</option>
         </select>
       </div>
 

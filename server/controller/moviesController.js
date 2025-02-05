@@ -12,9 +12,9 @@ class MoviesController {
           // extract query parameters
           const { genre, from_published_year, to_published_year, from_rate, to_rate } = req.query;
           // Call the movie service
-          let movies = (await this.movieService.getMovies(genre, from_published_year, to_published_year, from_rate, to_rate)).movies;
+          let movies = (await this.movieService.getMovies(genre, from_published_year, to_published_year, from_rate, to_rate));
           // return all movies
-          return res.status(200).json({ movies });
+          return res.status(200).json({ movies: movies });
       } catch(error){
         res.status(401).json({message: error.message});
       }

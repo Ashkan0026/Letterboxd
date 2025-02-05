@@ -10,16 +10,22 @@ class MovieService {
     async getMovies(genre, from_published_year, to_published_year, from_rate, to_rate) {
         try
         {
-            let movies = db.getMovies()
+            let res = db.getMovies()
+            if(!res.success)
+            {
+                console.log(res.message)
+                return []
+            }
+            let movies = res.movies
             // filter movies
-            if (genre) {
-                movies = movies.filter(movie => movie.genre === genre)
+            if (genre && genre !== "All Genres") {
+                movies = movies.filter(movie => movie.genre.toLowerCase().indexOf(genre.toLowerCase()) !== -1)
             }
             if (from_published_year) {
-                movies = movies.filter(movie => movie.published_year >= from_published_year)
+                movies = movies.filter(movie => movie._build_year >= from_published_year)
             }
             if (to_published_year) {
-                movies = movies.filter(movie => movie.published_year <= to_published_year)
+                movies = movies.filter(movie => movie._build_year <= to_published_year)
             }
             if (from_rate) {
                 movies = movies.filter(movie => movie.rate >= from_rate)

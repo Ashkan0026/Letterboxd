@@ -273,7 +273,7 @@ function insertMovie(movie) {
 }
 
 function getMovie(movie_id) {
-    const stmt = db.prepare("SELECT * FROM movies WHERE id = ? LIMIT 1")
+    const stmt = db.prepare("SELECT movies.id, movies.title, movies.desc, movies.genre, movies.image_path, movies.build_year, movies.added_by, AVG(replies.score) AS rate FROM movies INNER JOIN replies WHERE movies.id = replies.movie_id AND movies.id = ? GROUP BY movies.id")
 
     try {
         const movieData = stmt.get(movie_id)
@@ -286,11 +286,11 @@ function getMovie(movie_id) {
 } 
 
 function getMovies() {
-    const stmt = db.prepare("SELECT * FROM movies")
+    const stmt = db.prepare("SELECT movies.id, movies.title, movies.desc, movies.genre, movies.image_path, movies.build_year, movies.added_by, AVG(replies.score) AS rate FROM movies INNER JOIN replies WHERE movies.id = replies.movie_id GROUP BY movies.id")
 
     try {
         const rows = stmt.all()
-        const movies = rows.map(row => new Movie(row.id, row.title, row.desc, row.genre, row.image_path, row.build_year, row.added_by))
+        const movies = rows.map(row => new Movie(row.id, row.title, row.desc, row.genre, row.image_path, row.build_year, row.added_by, row.rate))
         return {movies: movies, success: true, message: ""}
     } catch(error) {
         return {movies: [], success: false, message: error.message}
@@ -298,11 +298,11 @@ function getMovies() {
 }
 
 function getUserMovies(user_id) {
-    const stmt = db.prepare("SELECT * FROM movies WHERE added_by = ?")
+    const stmt = db.prepare("SELECT movies.id, movies.title, movies.desc, movies.genre, movies.image_path, movies.build_year, movies.added_by, AVG(replies.score) AS rate FROM movies INNER JOIN replies WHERE movies.id = replies.movie_id AND added_by = ? GROUP BY movies.id")
 
     try {
         const rows = stmt.all(user_id)
-        const movies = rows.map(row => new Movie(row.id, row.title, row.desc, row.genre, row.image_path, row.build_year, row.added_by))
+        const movies = rows.map(row => new Movie(row.id, row.title, row.desc, row.genre, row.image_path, row.build_year, row.added_by, row.rate))
         return {movies: movies, success: true, message: ""}
     } catch(error) {
         return {movies: [], success: false, message: error.message}
