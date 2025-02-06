@@ -9,6 +9,7 @@ import UserDetail from './pages/UserDetail'; // Import UserDetail page
 import Navbar from './components/Navbar';
 import MovieDetail from './pages/MovieDetail'; // Import MovieDetail page
 import Feedbacks from './pages/Feedbacks';
+import Movies from './pages/Movies';
 
 const ProtectedRoute = () => {
   const { role } = useContext(AuthContext);
@@ -41,6 +42,11 @@ function App() {
           <Route path="/admin/feedbacks" element={
             <RequireAdmin>
               <Feedbacks />
+            </RequireAdmin>
+          } />
+          <Route path="/admin/movies" element={
+            <RequireAdmin>
+              <Movies />
             </RequireAdmin>
           } />
           <Route path="/users" element={<Users />} />
