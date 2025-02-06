@@ -2,7 +2,7 @@ const sqliteDatabase = require("better-sqlite3")
 const {User} = require("../model/users")
 const {Movie} = require("../model/movies")
 const {Follows} = require("../model/follows")
-const {Reply, ReplyWithUser} = require("../model/replies")
+const {Reply, ReplyWithUser, ReplyWithMovie, ReplyWithMovieAndUser} = require("../model/replies")
 
 let db = null
 
@@ -411,11 +411,11 @@ function insertReply(reply) {
 }
 
 function getAllReplies() {
-    const stmt = db.prepare("SELECT * FROM replies")
+    const stmt = db.prepare("SELECT r.*, m.title, u.username FROM replies AS r INNER JOIN movies AS m ON r.movie_id = m.id INNER JOIN users AS u ON r.user_id = u.id")
 
     try {
         const rows = stmt.all()
-        const replies = rows.map(row => new Reply(row.id, row.score, row.desc, row.user_id, row.movie_id))
+        const replies = rows.map(row => new ReplyWithMovieAndUser(row.id, row.score, row.desc, row.user_id, row.movie_id, row.username, row.title))
         return {replies: replies, success: true, message: ""}
     } catch(error) {
         throw(error)

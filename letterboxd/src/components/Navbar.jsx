@@ -39,6 +39,13 @@ const Navbar = () => {
               Users
             </Link>
           </li>
+          <li className="nav-item">
+            {role === 'admin' && (
+              <Link to="/admin/feedbacks" className="nav-links">
+                Manage Feedbacks
+              </Link>
+            )}
+          </li>
           {!token ? (
             <li className="nav-item">
               <Link to="/signup" className="nav-links" onClick={toggleMenu}>

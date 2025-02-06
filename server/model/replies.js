@@ -69,7 +69,43 @@ class ReplyWithUser extends Reply {
     }
 }
 
+class ReplyWithMovie extends Reply {
+    constructor(id, score, desc, user_id, movie_id, movie_title) {
+        super(id, score, desc, user_id, movie_id);
+        this._movie_title = movie_title;
+    }
+  
+    // Getter for movie title
+    get movie_title() {
+      return this._movie_title;
+    }
+  
+    // Setter for movie title
+    set movie_title(value) {
+      this._movie_title = value;
+    }
+}
+
+class ReplyWithMovieAndUser extends ReplyWithUser {
+    constructor(id, score, desc, user_id, movie_id, user_name, movie_title) {
+        super(id, score, desc, user_id, movie_id, user_name);
+        this._movie_title = movie_title;
+    }
+  
+    // Getter for movie title
+    get movie_title() {
+      return this._movie_title;
+    }
+  
+    // Setter for movie title
+    set movie_title(value) {
+      this._movie_title = value;
+    }
+}
+
 module.exports = {
     Reply,
-    ReplyWithUser
+    ReplyWithUser,
+    ReplyWithMovie,
+    ReplyWithMovieAndUser
 }

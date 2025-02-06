@@ -8,6 +8,7 @@ import Users from './pages/Users'; // Import Users page
 import UserDetail from './pages/UserDetail'; // Import UserDetail page
 import Navbar from './components/Navbar';
 import MovieDetail from './pages/MovieDetail'; // Import MovieDetail page
+import Feedbacks from './pages/Feedbacks';
 
 const ProtectedRoute = () => {
   const { role } = useContext(AuthContext);
@@ -19,6 +20,15 @@ const ProtectedRoute = () => {
   }
 };
 
+const RequireAdmin = ({ children }) => {
+  const { role } = useContext(AuthContext);
+  
+  if (role !== "admin") {
+    return <Navigate to="/" />;
+  }
+  return children;
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -28,6 +38,11 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/" element={<ProtectedRoute />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/feedbacks" element={
+            <RequireAdmin>
+              <Feedbacks />
+            </RequireAdmin>
+          } />
           <Route path="/users" element={<Users />} />
           <Route path="/user/:id" element={<UserDetail />} />
           <Route path="/movie/:movieId" element={<MovieDetail />} />
