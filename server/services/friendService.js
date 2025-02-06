@@ -20,8 +20,9 @@ class FriendService{
 
     async addFriend(follower_user_id, following_user_id){
         try{
-
-            var follow = new Follows(0, following_user_id, follower_user_id, new Date());
+            const following = db.getSpecifiedUser(follower_user_id);
+            const follower = db.getSpecifiedUser(following_user_id);
+            const follow = new Follows(0, following.user._username, follower.user._username, new Date());
             let res = db.insertFollows(follow);
             return res
         } catch (error){
