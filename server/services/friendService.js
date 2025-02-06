@@ -9,7 +9,8 @@ class FriendService{
 
     async getFriends(username){
         try{
-            let friends = db.getUserFollowers(username);
+            const user = db.getSpecifiedUser(username);
+            let friends = db.getUserFollowers(user.user._username);
             return friends
         } catch (error){
             throw(error)

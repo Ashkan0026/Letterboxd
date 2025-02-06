@@ -37,10 +37,14 @@ class MoviesController {
     async getFavoriteMovies(req, res) {
         try {
             const userId = req.user.id; // Extract user_id from the JWT token
-
             // Call the movie service to fetch user’s favorite movies
-            let favoriteMovies = (await this.movieService.getReviewedMovie(userId)).favoriteMovies;
-            
+            let favoriteMovies = (await this.movieService.getReviewedMovie(userId)).movies;
+            // if favoriteMovies is empty, return []
+            if (!favoriteMovies) {
+                console.log("empty");
+                return res.status(200).json({ favoriteMovies: [] });
+            }
+
             return res.status(200).json({ favoriteMovies });
         } catch (error) {
             res.status(500).json({ message: error.message });

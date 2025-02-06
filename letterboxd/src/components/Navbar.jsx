@@ -40,6 +40,11 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="nav-item">
+            <Link to="/profile" className="nav-links" onClick={toggleMenu}>
+              Profile
+            </Link>
+          </li>
+          <li className="nav-item">
             {role === 'admin' && (
               <Link to="/admin/feedbacks" className="nav-links">
                 Manage Feedbacks

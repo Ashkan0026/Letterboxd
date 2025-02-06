@@ -12,7 +12,7 @@ router.get('/movies', authenticateToken, (req, res) => moviesController.getMovie
 router.get('/movies/:movie_id', authenticateToken, (req, res) => moviesController.getMovieById(req, res));
 
 // ✅ User: Get favorite movies (Requires authentication)
-router.get('/movies/favorites', authenticateToken, (req, res) => moviesController.getFavoriteMovies(req, res));
+router.get('/movies/user/favorites', authenticateToken, (req, res) => moviesController.getFavoriteMovies(req, res));
 
 // 🔒 Admin: Add new movie
 router.post('/movies', authenticateToken, authorizeRole('admin'), (req, res) => moviesController.addMovie(req, res));

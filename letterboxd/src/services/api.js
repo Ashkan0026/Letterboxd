@@ -19,7 +19,7 @@ api.interceptors.request.use((config) => {
 export const moviesApi = {
   getAllMovies: (filters) => api.get('/movies', { params: filters }),
   getMovieById: (movieId) => api.get(`/movies/${movieId}`),
-  getFavoriteMovies: () => api.get('/movies/favorites'),
+  getFavoriteMovies: () => api.get('/movies/user/favorites'),
   addMovie: (movieData) => api.post('/movies', movieData),
   editMovie: (movieId, movieData) => api.put(`/movies/${movieId}`, movieData),
   deleteMovie: (movieId) => api.delete(`/movies/${movieId}`),
@@ -30,6 +30,7 @@ export const usersApi = {
   getAllUsers: () => api.get('/users'),
   getUserByUsername: (username) => api.get(`/user/${username}`),
   deleteUser: (userId) => api.delete(`/users/${userId}`),
+  friends: () => api.get('/friend/my'),
   editUser: (userId, userData) => api.put(`/users/${userId}`, userData),
   followUser: async (following_user_id) => {
     try {

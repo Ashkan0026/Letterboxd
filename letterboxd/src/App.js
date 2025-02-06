@@ -10,6 +10,7 @@ import Navbar from './components/Navbar';
 import MovieDetail from './pages/MovieDetail'; // Import MovieDetail page
 import Feedbacks from './pages/Feedbacks';
 import Movies from './pages/Movies';
+import Profile from './pages/Profile';
 
 const ProtectedRoute = () => {
   const { role } = useContext(AuthContext);
@@ -37,6 +38,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/" element={<ProtectedRoute />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/feedbacks" element={
