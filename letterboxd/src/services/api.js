@@ -18,6 +18,7 @@ api.interceptors.request.use((config) => {
 // Movies API
 export const moviesApi = {
   getAllMovies: (filters) => api.get('/movies', { params: filters }),
+  getMovieById: (movieId) => api.get(`/movies/${movieId}`),
   getFavoriteMovies: () => api.get('/movies/favorites'),
   addMovie: (movieData) => api.post('/movies', movieData),
   editMovie: (movieId, movieData) => api.put(`/movies/${movieId}`, movieData),

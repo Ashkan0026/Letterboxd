@@ -8,6 +8,9 @@ const moviesController = new MoviesController();
 // ✅ Public: Get all movies (Requires authentication)
 router.get('/movies', authenticateToken, (req, res) => moviesController.getMovies(req, res));
 
+// ✅ Public: Get movie by ID (Requires authentication)
+router.get('/movies/:movie_id', authenticateToken, (req, res) => moviesController.getMovieById(req, res));
+
 // ✅ User: Get favorite movies (Requires authentication)
 router.get('/movies/favorites', authenticateToken, (req, res) => moviesController.getFavoriteMovies(req, res));
 

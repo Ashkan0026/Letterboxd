@@ -17,7 +17,6 @@ class MovieService {
                 return []
             }
             let movies = res.movies
-            console.log(to_rate, from_rate)
             // filter movies
             if (genre && genre !== "All Genres") {
                 movies = movies.filter(movie => movie.genre.toLowerCase().indexOf(genre.toLowerCase()) !== -1)
@@ -44,7 +43,7 @@ class MovieService {
     async getMovieById(id) {
         try
         {
-            let movie = db.getReveiwedMovie(id)
+            let movie = db.getMovie(id)
             return movie
         } catch (error){
             throw(error)

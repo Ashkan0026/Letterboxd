@@ -9,14 +9,14 @@ class FeedbackController {
   // description and rate between 1 and 5
     async registerFeedback(req, res){
         try{
-            const { description, rate, movieId } = req.body;
+            const { description, rate, movie_id } = req.body;
 
             if (rate < 1 || rate > 5) {
                 return res.status(400).json({ message: 'rate must be between 1 and 5' });
             }
 
             // Call the feedback service
-            await this.feedbackService.addReply(description, rate, req.user.id, movieId);
+            await this.feedbackService.addReply(description, rate, req.user.id, movie_id);
 
             return res.status(204).json({message: "Feedback added successfully"});
         } catch(error){
@@ -75,7 +75,7 @@ class FeedbackController {
             // Call the feedback service
             let feedbacks = (await this.feedbackService.getMovieReply(movieId)).replies;
             // return feedbacks
-            return res.status(200).json({ feedbacks: [] });
+            return res.status(200).json({ feedbacks });
         } catch(error){
             res.status(401).json({message: error.message});
         }

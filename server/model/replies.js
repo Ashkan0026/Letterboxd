@@ -52,7 +52,24 @@ class Reply {
       this._movie_id = value;
     }
 }
+class ReplyWithUser extends Reply {
+    constructor(id, score, desc, user_id, movie_id, user_name) {
+        super(id, score, desc, user_id, movie_id);
+        this._user_name = user_name;
+    }
+  
+    // Getter for user name
+    get user_name() {
+      return this._user_name;
+    }
+  
+    // Setter for user name
+    set user_name(value) {
+      this._user_name = value;
+    }
+}
 
 module.exports = {
-    Reply
+    Reply,
+    ReplyWithUser
 }

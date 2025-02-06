@@ -20,6 +20,19 @@ class MoviesController {
       }
     }
 
+    // get movie by ID
+    async getMovieById(req, res){
+        try{
+            const movieId = req.params.movie_id;
+            // Call the movie service
+            let movie = (await this.movieService.getMovieById(movieId)).movie;
+            // return the movie
+            return res.status(200).json({ movie });
+        } catch(error){
+            res.status(401).json({message: error.message});
+        }
+    }
+
     // Get user's favorite movies (Extract user_id from JWT)
     async getFavoriteMovies(req, res) {
         try {

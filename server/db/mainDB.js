@@ -2,7 +2,7 @@ const sqliteDatabase = require("better-sqlite3")
 const {User} = require("../model/users")
 const {Movie} = require("../model/movies")
 const {Follows} = require("../model/follows")
-const {Reply} = require("../model/replies")
+const {Reply, ReplyWithUser} = require("../model/replies")
 
 let db = null
 
@@ -11,11 +11,11 @@ function initialize(dbPath) {
         return
     }
     db = new sqliteDatabase(dbPath)
-    // initializeUsersTable()
-    // initializeFollowsTable()
-    // initializeMoviesTable()
-    // initializeRepliesTable()
-    // insertUsersInBatch()
+     //initializeUsersTable()
+     //initializeFollowsTable()
+     //initializeMoviesTable()
+     //initializeRepliesTable()
+     //insertUsersInBatch()
 }
 
 function initializeUsersTable() {
@@ -286,7 +286,7 @@ function getMovie(movie_id) {
 } 
 
 function getMovies() {
-    const stmt = db.prepare("SELECT movies.id, movies.title, movies.desc, movies.genre, movies.image_path, movies.build_year, movies.added_by, AVG(replies.score) AS rate FROM movies INNER JOIN replies WHERE movies.id = replies.movie_id GROUP BY movies.id")
+    const stmt = db.prepare("SELECT movies.id, movies.title, movies.desc, movies.genre, movies.image_path, movies.build_year, movies.added_by, COALESCE(AVG(replies.score), 0) AS rate FROM movies LEFT JOIN replies ON movies.id = replies.movie_id GROUP BY movies.id;")
 
     try {
         const rows = stmt.all()
@@ -435,11 +435,11 @@ function getReply(reply_id) {
 }
 
 function getMovieReplies(movie_id) {
-    const stmt = db.prepare("SELECT * FROM replies WHERE movie_id = ?")
+    const stmt = db.prepare("SELECT r.*, u.username FROM replies AS r INNER JOIN users AS u ON r.user_id = u.id WHERE r.movie_id = ?;")
 
     try {
         const rows = stmt.all(movie_id)
-        const replies = rows.map(row => new Reply(row.id, row.score, row.desc, row.user_id, row.movie_id))
+        const replies = rows.map(row => new ReplyWithUser(row.id, row.score, row.desc, row.user_id, row.movie_id, row.username))
         return {replies: replies, success: true, message: ""}
     } catch(error) {
         return {replies: [], success: false, message: error.message}
